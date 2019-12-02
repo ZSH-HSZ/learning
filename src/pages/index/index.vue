@@ -1,8 +1,8 @@
 <template>
   <div class="app-index">
     <div class="index11-left">
-      <div class="index11-time">13:42</div>
-      <div class="index11-date">2019-12-2 星期五</div>
+      <div class="index11-time">{{minute}}</div>
+      <div class="index11-date">{{formatYY()}} 星期{{formatWeek()}}</div>
       <div class="index11-name">
         <h2 class="name-1">{{$_.get(userInfo, 'info.welcome')}}</h2>
         <div class="name-2">部门：{{$_.get(userInfo, 'info.department')}}</div>
@@ -36,19 +36,52 @@
         <div>指导书建议</div>
       </div>
     </div>
+    <Question :visible.sync="dialogQuestion" @closeDialog="closeDialog" @newQuestion="newQuestion"></Question>
+    <Rank :visible.sync="rank" @closeDialog="closeDialog"></Rank>
+    <NewQuestion :visible.sync="newQuestionDialog" @closeDialog="closeDialog"></NewQuestion>
+    <Draw :visible.sync="drawDialog"></Draw>
   </div>
 </template>
 
 <script>
+  import Question from '../Question/index'
+  import Rank from '../Rank/index'
+  import NewQuestion from '../NewQuestion/index'
+  import {
+    DrawDialog
+  } from '../DrawDialog/DrawDialog.umd.min.js'
+  import moment from 'moment'
   export default {
+    components: {
+      Question,
+      Rank,
+      NewQuestion,
+      Draw: DrawDialog
+    },
     data() {
       return {
         userInfo: {},
-        modal: ''
+        modal: '',
+        // 问题窗口
+        dialogQuestion: false,
+        // 排名窗口
+        rank: false,
+        // 新问题窗口
+        newQuestionDialog: false,
+        drawDialog: false,
+        show: {
+          rank: 'rank',
+          faq: 'dialogQuestion'
+        },
+        minute: this.formatHH()
       }
     },
     mounted() {
-      this.query()
+      this.getHH();
+      this.query();
+      if(this.$route.query.modal) {
+        this.$set(this, this.show[this.$route.query.modal], true)
+      }
     },
     methods: {
       query() {
@@ -60,13 +93,38 @@
         })
       },
       showModal(val) {
-        this.modal = val
+        this.$set(this, this.show[val], true)
         this.$router.push({
           query: {
             ...this.$route.query,
             modal: val
           }
         })
+      },
+      // 关闭弹窗
+      closeDialog(val) {
+        this.$set(this, val, false)
+      },
+      newQuestion() {
+        // 先关闭问题弹窗
+        this.closeDialog('dialogQuestion')
+        // 打开新问题弹窗
+        this.newQuestionDialog = true
+      },
+      getHH() {
+        setTimeout(()=>{
+          this.minute = this.formatHH();
+          this.getHH()
+        }, 1000)
+      },
+      formatHH() {
+        return moment().format('HH:mm')
+      },
+      formatYY() {
+        return moment().format('YYYY年MM月DD日')
+      },
+      formatWeek() {
+        return ['日', '一', '二', '三', '四', '五', '六'][new Date().getDay()]
       }
     },
   }
@@ -130,7 +188,7 @@
     display: flex;
     justify-content: start;
     flex-wrap: wrap;
-    width: 420px;
+    width: 396px;
   }
 
   .index11-right .right-flex {

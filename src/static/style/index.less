@@ -250,9 +250,20 @@ a {
 }
 
 .dialog-component {
-  width: 744px;
-  height: 408px;
-  background: rgba(255, 255, 255, 0.92);
-  margin: 0 auto;
-  padding: 23px 55px 0 55px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  .dialog-body {
+    width: 764px;
+    height: 408px;
+    background: rgba(255, 255, 255, 0.92);
+    margin: 0 auto;
+    padding: 23px 55px 0 55px;
+  }
 }

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <DrawDialog :visible.sync="visible"></DrawDialog>
   </div>
 </template>
 
@@ -11,11 +10,6 @@
   export default {
     components: {
       DrawDialog,
-    },
-    watch: {
-      visible(newValue, oldValue) {
-        this.$router.push('/')
-      }
     },
     data() {
       return {

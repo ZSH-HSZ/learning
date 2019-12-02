@@ -1,5 +1,6 @@
 const apis = {
   question: '/app/faq/',
-  userInfo: '/app/index/'
+  userInfo: '/app/index/',
+  task: '/app/task/'
 }
 export default apis

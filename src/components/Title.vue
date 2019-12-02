@@ -1,6 +1,7 @@
 <template>
   <div class="components-title">
     {{title}}
+    <img src="../static/images/10.png" alt="" @click="close()">
   </div>
 </template>
 
@@ -8,6 +9,12 @@
   export default {
     props: {
       title: String
+    },
+    methods: {
+      close() {
+        this.$router.push({query: {}})
+        this.$emit('dialogClose')
+      }
     },
   }
 </script>
@@ -22,5 +29,11 @@
     text-align: center;
     padding: 0 40px;
     margin: 0 auto;
+    position: relative;
+    img {
+      position: absolute;
+      right: -270px;
+      top: -6px;
+    }
   }
 </style>
