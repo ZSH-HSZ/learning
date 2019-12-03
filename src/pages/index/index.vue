@@ -101,10 +101,9 @@
           if(this.show[val]) {
             this.$set(this, this.show[val], true)
             this.$router.push({
-              query: {
-                ...this.$route.query,
+              query: Object.assign(this.$route.query, {
                 modal: val
-              }
+              })
             })
           }
         }
@@ -200,7 +199,7 @@
 
   .index11-right {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     flex-wrap: wrap;
     width: 396px;
   }

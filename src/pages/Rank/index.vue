@@ -94,6 +94,11 @@
 </script>
 
 <style lang="less" scoped>
+  .index13.dialog-component {
+    .dialog-body {
+      height: 500px;
+    }
+  }
   .app-index13 {
     height: 500px;
     background: rgba(255, 255, 255, .93);
@@ -126,7 +131,7 @@
   .index13-main {
     margin-top: 44px;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
   }
 
   .index13-main .index13-left {
