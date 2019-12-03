@@ -1,5 +1,6 @@
 <template>
   <div>
+    <draw-dialog :visible.sync="visible" />
   </div>
 </template>
 

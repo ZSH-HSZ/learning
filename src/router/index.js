@@ -9,6 +9,13 @@ const routes = [
     name: 'home',
     component: index
   },
+  {
+    path: '/draw',
+    name: 'draw',
+    component: function () {
+      return import('../pages/DrawDialog/index.vue')
+    }
+  },
   // {
   //   path: '/question',
   //   name: 'question',
