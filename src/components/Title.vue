@@ -1,7 +1,7 @@
 <template>
   <div class="components-title">
     {{title}}
-    <img src="../static/images/10.png" alt="" @click="close()">
+    <img src="../static/images/10.png" alt="" @click="close()" class="point">
   </div>
 </template>
 

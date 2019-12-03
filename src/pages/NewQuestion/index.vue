@@ -7,8 +7,8 @@
         <div class="mask align jus" v-if="!input">这里输入你的问题</div>
       </div>
       <div class="cancel-enter align between">
-        <div class="point button cancel">取 消</div>
-        <div class="point button enter" @click="enter()">提 交</div>
+        <div class="point button cancel" @click="enter(false)">取 消</div>
+        <div class="point button enter" @click="enter(true)">提 交</div>
       </div>
     </div>
   </div>
@@ -30,18 +30,25 @@
       closeDialog() {
         this.$emit('closeDialog', 'newQuestionDialog')
       },
-      enter() {
-        this.$post({
-          road: 'question',
-          data: {
-            dtype: "faq_new",
-            uid: "330172199301013625",
-            msg: this.input
+      enter(val) {
+        if(val) {
+          if(this.input) {
+            this.$post({
+              road: 'question',
+              data: {
+                dtype: "faq_new",
+                // uid: "330172199301013625",
+                msg: this.input
+              }
+            })
+            .then(res=>{
+              this.input = ''
+              this.$emit('closeDialog', 'newQuestionDialog')
+            })
           }
-        })
-        .then(res=>{
+        }else {
           this.$emit('closeDialog', 'newQuestionDialog')
-        })
+        }
       }
     },
   }

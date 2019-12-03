@@ -1,6 +1,6 @@
 <template>
   <div class="progress">
-    <div class="percent" :style="`width: ${percent*311}px`"></div>
+    <div class="percent" :style="`width: ${percent*311}px;background: ${background}`" ></div>
   </div>
 </template>
 
@@ -10,6 +10,10 @@
       percent: {
         type: Number,
       },
+      background: {
+        type: String,
+        default: '#ff7d0d'
+      }
     },
   }
 </script>

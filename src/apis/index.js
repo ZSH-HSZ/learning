@@ -2,6 +2,8 @@ import axios from 'axios'
 import _ from 'lodash'
 import baseUrl from './road'
 import apis from './apis'
+import qs from 'qs'
+import { MessageBox } from 'element-ui';
 const methods = ["get", "post", "delete", "put", "patch"];
 export const [get, post, del, put, patch] = methods.map(action => {
   return (val) => {
@@ -11,10 +13,17 @@ export const [get, post, del, put, patch] = methods.map(action => {
       axios({
         method: action,
         url,
-        data: val.data
+        data: qs.stringify(val.data)
       })
       .then(res => {
         resolve(res.data)
+        if(Number(res.data.code)!==200) {
+          MessageBox(res.data.msg, '', {
+            confirmButtonText: '好',
+            callback: action => {
+            }
+          });
+        }
       })
       .catch(err => {
         reject({

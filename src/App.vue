@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class=" align jus">
+  <div id="app" class="align jus">
     <router-view></router-view>
   </div>
 </template>

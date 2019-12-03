@@ -10,35 +10,21 @@
       </div>
       <div class="index11-name">
         <h2 class="name-1">我的成绩</h2>
-        <div class="name-2">{{$_.get(userInfo, 'score[0].title')}}：{{$_.get(userInfo, 'score.[1].score')}}</div>
-        <div class="name-2">{{$_.get(userInfo, 'score[1].title')}}：{{$_.get(userInfo, 'score.[1].score')}}</div>
+        <div class="name-2" v-for="(item, index) in $_.get(userInfo, 'score')" :key="index">
+          {{$_.get(item, 'title')}}：{{$_.get(item, 'score')}}
+        </div>
       </div>
     </div>
-    <div class="index11-right">
-      <div @click="showModal('rank')" class="right-flex">
-        <img src="../../static/images/5.png" alt="">
-        <div>任务排名</div>
-      </div>
-      <div @click="showModal('faq')" class="right-flex">
-        <img src="../../static/images/4.png" alt="">
-        <div>咨询答疑</div>
-      </div>
-      <div class="right-flex">
-        <img src="../../static/images/3.png" alt="">
-        <div>模块化系统</div>
-      </div>
-      <div class="right-flex">
-        <img src="../../static/images/2.png" alt="">
-        <div>学习培训</div>
-      </div>
-      <div class="right-flex">
-        <img src="../../static/images/1.png" alt="">
-        <div>指导书建议</div>
+    <div class="index11-right align">
+      <div @click="showModal(clickParams[index], item)" class="right-flex" v-for="(item, index) in $_.get(userInfo, 'app', [])" :key="index">
+        <img :src="item.icon" alt="">
+        <div>{{item.title}}</div>
+        <div class="msg" v-if="Number(item.msg)">{{item.msg}}</div>
       </div>
     </div>
     <Question :visible.sync="dialogQuestion" @closeDialog="closeDialog" @newQuestion="newQuestion"></Question>
     <Rank :visible.sync="rank" @closeDialog="closeDialog"></Rank>
-    <NewQuestion :visible.sync="newQuestionDialog" @closeDialog="closeDialog"></NewQuestion>
+    <NewQuestion :visible.sync="newQuestionDialog" @closeDialog="newQuestionCloseDialog"></NewQuestion>
     <Draw :visible.sync="drawDialog"></Draw>
   </div>
 </template>
@@ -71,9 +57,25 @@
         drawDialog: false,
         show: {
           rank: 'rank',
-          faq: 'dialogQuestion'
+          faq: 'dialogQuestion',
+          draw: 'drawDialog'
         },
-        minute: this.formatHH()
+        minute: this.formatHH(),
+        clickParams: [
+          'rank',
+          'faq',
+          '',
+          '',
+          '',
+          'draw'
+        ]
+      }
+    },
+    watch: {
+      drawDialog(newValue, oldValue) {
+        if(!newValue) {
+          this.$router.push({query: {}})
+        }
       }
     },
     mounted() {
@@ -92,14 +94,21 @@
           this.userInfo = res
         })
       },
-      showModal(val) {
-        this.$set(this, this.show[val], true)
-        this.$router.push({
-          query: {
-            ...this.$route.query,
-            modal: val
+      showModal(val, item) {
+        if(/http:/.test(item.uri)) {
+          window.location.href = item.uri
+        }else {
+          if(this.show[val]) {
+            this.$set(this, this.show[val], true)
+            this.$router.push({
+              query: {
+                ...this.$route.query,
+                modal: val
+              }
+            })
           }
-        })
+        }
+        
       },
       // 关闭弹窗
       closeDialog(val) {
@@ -110,6 +119,12 @@
         this.closeDialog('dialogQuestion')
         // 打开新问题弹窗
         this.newQuestionDialog = true
+      },
+      newQuestionCloseDialog() {
+        // 先关闭问题弹窗
+        this.closeDialog('newQuestionDialog')
+        // 打开新问题弹窗
+        this.dialogQuestion = true
       },
       getHH() {
         setTimeout(()=>{
@@ -131,7 +146,7 @@
 
 </script>
 
-<style scoped>
+<style lang='less' scoped>
   .app-index {
     display: flex;
     justify-content: center;
@@ -165,7 +180,6 @@
     margin-bottom: 10px;
     padding: 9px;
     text-align: left;
-    height: 98px;
   }
 
   .index11-name .name-1 {
@@ -197,6 +211,24 @@
     margin: 5px;
     background: rgba(34,38,43,0.53);
     cursor: pointer;
+    transition: all .3s linear;
+    position: relative;
+    .msg {
+      position: absolute;
+      right: -8px;
+      top: -10px;
+      background: #ff0008;
+      color: #fff;
+      font-size: 14px;
+      text-align: center;
+      line-height: 20px;
+      width: 20px;
+      height: 20px;
+      border-radius: 100%;
+    }
+  }
+  .index11-right .right-flex:hover {
+    background: rgba(108,168,255, .7);
   }
 
   .right-flex img {
