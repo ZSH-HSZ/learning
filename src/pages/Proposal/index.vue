@@ -82,7 +82,7 @@
       height: 40px;
       line-height: 40px;
       text-align: center;
-      background: rgba(0,99,177,1, 1);
+      background: #00b7c3;
       color: #fff;
       font-size: 21px;
       font-weight: 500;

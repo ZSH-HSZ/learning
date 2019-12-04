@@ -1,8 +1,8 @@
 <template>
   <div class="question dialog-component" v-if="visible">
     <div class="dialog-body">
-      <CTitle title="咨询答疑" @dialogClose="closeDialog()"></CTitle>
-      <div class="new-question point" @click="newQuestion()">+ 新提问</div>
+      <CTitle title="指导书建议" @dialogClose="closeDialog()"></CTitle>
+      <div class="new-question point" @click="newQuestion()">+ 新建议</div>
       <div class="all-question-list">
         <div class="question-item" v-for="(item, index) in questionList" :key="index">
           <div class="question-time">提问时间：{{item.msg_time}}</div>
