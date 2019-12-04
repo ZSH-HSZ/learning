@@ -1,7 +1,7 @@
 <template>
   <div class="question dialog-component" v-if="visible">
     <div class="dialog-body">
-      <CTitle title="咨询答疑" @dialogClose="closeDialog()"></CTitle>
+      <CTitle title="指导书建议" @dialogClose="closeDialog()"></CTitle>
       <div class="new-question point" @click="newQuestion()">+ 新提问</div>
       <div class="all-question-list">
         <div class="question-item" v-for="(item, index) in questionList" :key="index">
@@ -45,7 +45,7 @@
     methods: {
       query() {
         this.$post({
-            road: 'question'
+            road: 'advise'
           })
           .then(res => {
             this.questionList = res.list
@@ -62,10 +62,10 @@
         }
       },
       closeDialog() {
-        this.$emit('closeDialog', 'faq')
+        this.$emit('closeDialog', 'advise')
       },
       newQuestion() {
-        this.$emit('newQuestion', {old: 'faq', new: 'newQuestionDialog'})
+        this.$emit('newQuestion', {old: 'advise', new: 'dialogProposalNew'})
       }
     },
   }

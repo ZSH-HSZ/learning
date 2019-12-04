@@ -28,15 +28,15 @@
     },
     methods: {
       closeDialog() {
-        this.$emit('closeDialog', {old: 'newQuestionDialog', new: 'faq'})
+        this.$emit('closeDialog', {old: 'dialogProposalNew', new: 'advise'})
       },
       enter(val) {
         if(val) {
           if(this.input) {
             this.$post({
-              road: 'question',
+              road: 'advise',
               data: {
-                dtype: "faq_new",
+                dtype: "advise_new",
                 // uid: "330172199301013625",
                 msg: this.input
               }

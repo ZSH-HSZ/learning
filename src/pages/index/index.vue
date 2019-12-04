@@ -16,23 +16,32 @@
       </div>
     </div>
     <div class="index11-right align">
-      <div @click="showModal(clickParams[index], item)" class="right-flex" v-for="(item, index) in $_.get(userInfo, 'app', [])" :key="index">
+      <div @click="showModal(item)" class="right-flex" v-for="(item, index) in $_.get(userInfo, 'app', [])" :key="index">
         <img :src="item.icon" alt="">
         <div>{{item.title}}</div>
         <div class="msg" v-if="Number(item.msg)">{{item.msg}}</div>
       </div>
     </div>
-    <Question :visible.sync="dialogQuestion" @closeDialog="closeDialog" @newQuestion="newQuestion"></Question>
-    <Rank :visible.sync="rank" @closeDialog="closeDialog"></Rank>
-    <NewQuestion :visible.sync="newQuestionDialog" @closeDialog="newQuestionCloseDialog"></NewQuestion>
-    <Draw :visible.sync="drawDialog"></Draw>
+    <Question :visible="modalControl.faq" @closeDialog="closeDialog" @newQuestion="closeAndOpenNewModel"></Question>
+    <NewQuestion :visible="modalControl.newQuestionDialog" @closeDialog="closeAndOpenNewModel"></NewQuestion>
+
+    <Proposal :visible="modalControl.advise" @closeDialog="closeDialog" @newQuestion="closeAndOpenNewModel"></Proposal>
+    <NewProposal :visible="modalControl.dialogProposalNew" @closeDialog="closeAndOpenNewModel"></NewProposal>
+
+
+    <Rank :visible="modalControl.task" @closeDialog="closeDialog"></Rank>
+    <Draw :visible.sync="modalControl.drawDialog"></Draw>
   </div>
 </template>
 
 <script>
-  import Question from '../Question/index'
   import Rank from '../Rank/index'
+
+  import Question from '../Question/index'
   import NewQuestion from '../NewQuestion/index'
+
+  import Proposal from '../Proposal/index'
+  import NewProposal from '../NewProposal/index'
   import {
     DrawDialog
   } from '../DrawDialog/DrawDialog.umd.min.js'
@@ -42,33 +51,34 @@
       Question,
       Rank,
       NewQuestion,
-      Draw: DrawDialog
+      Draw: DrawDialog,
+      Proposal,
+      NewProposal
     },
     data() {
       return {
         userInfo: {},
-        modal: '',
-        // 问题窗口
-        dialogQuestion: false,
-        // 排名窗口
-        rank: false,
-        // 新问题窗口
-        newQuestionDialog: false,
-        drawDialog: false,
         show: {
-          rank: 'rank',
-          faq: 'dialogQuestion',
-          draw: 'drawDialog'
+          task: 'task',
+          faq: 'faq',
+          draw: 'drawDialog',
+          advise: 'advise'
         },
         minute: this.formatHH(),
-        clickParams: [
-          'rank',
-          'faq',
-          '',
-          '',
-          '',
-          'draw'
-        ]
+        modalControl: {
+          advise: false,
+          dialogProposalNew: false,
+
+          // 问题窗口
+          faq: false,
+          // 新问题窗口
+          newQuestionDialog: false,
+
+
+          // 排名窗口
+          task: false,
+          drawDialog: false,
+        }
       }
     },
     watch: {
@@ -82,7 +92,7 @@
       this.getHH();
       this.query();
       if(this.$route.query.modal) {
-        this.$set(this, this.show[this.$route.query.modal], true)
+        this.$set(this.modalControl, this.$route.query.modal, true)
       }
     },
     methods: {
@@ -94,16 +104,16 @@
           this.userInfo = res
         })
       },
-      showModal(val, item) {
+      showModal(item) {
+        let uri = item.uri
         if(/http:/.test(item.uri)) {
           window.location.href = item.uri
         }else {
-          if(this.show[val]) {
-            this.$set(this, this.show[val], true)
+          let query  = Object.assign({}, this.$route.query)
+          if(this.show[uri]) {
+            this.$set(this.modalControl, this.show[uri], true)
             this.$router.push({
-              query: Object.assign(this.$route.query, {
-                modal: val
-              })
+              query: this.$_.assign(query, {modal: uri})
             })
           }
         }
@@ -111,19 +121,16 @@
       },
       // 关闭弹窗
       closeDialog(val) {
-        this.$set(this, val, false)
+        this.$set(this.modalControl, val, false)
       },
-      newQuestion() {
-        // 先关闭问题弹窗
-        this.closeDialog('dialogQuestion')
-        // 打开新问题弹窗
-        this.newQuestionDialog = true
+      openNew(val) {
+        this.$set(this.modalControl, val, true)
       },
-      newQuestionCloseDialog() {
+      closeAndOpenNewModel(val) {
         // 先关闭问题弹窗
-        this.closeDialog('newQuestionDialog')
+        this.closeDialog(val.old)
         // 打开新问题弹窗
-        this.dialogQuestion = true
+        this.openNew(val.new)
       },
       getHH() {
         setTimeout(()=>{
@@ -149,6 +156,7 @@
   .app-index {
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 150px;
   }
 

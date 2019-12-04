@@ -86,7 +86,7 @@
         })
       },
       closeDialog() {
-        this.$emit('closeDialog', 'rank')
+        this.$emit('closeDialog', 'task')
       }
     },
   }
