@@ -68,19 +68,23 @@
         type: Boolean,
       },
     },
+    watch: {
+      visible(newValue, oldValue) {
+        if(newValue) {
+          this.query()
+        }
+      }
+    },
     data() {
       return {
         taskStatus: {}
       }
     },
     mounted () {
-      this.query();
     },
     methods: {
       query() {
-        this.$post({
-          road: 'task'
-        })
+        this.$store.dispatch('taskList')
         .then(res=>{
           this.taskStatus = res
         })
