@@ -4,7 +4,7 @@
       <CTitle title="咨询答疑" @dialogClose="closeDialog()"></CTitle>
       <div class="input-contain">
         <textarea name="" id="input-contain" rows="10" cols="77" v-model="input"></textarea>
-        <div class="mask align jus" v-if="!input">这里输入你的问题</div>
+        <div class="mask align jus" v-if="!input">这里输入你的建议</div>
       </div>
       <div class="cancel-enter align between">
         <div class="point button cancel" @click="enter(false)">取 消</div>
