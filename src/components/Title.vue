@@ -12,7 +12,9 @@
     },
     methods: {
       close() {
-        this.$router.push({query: {}})
+        if(this.$route.query.modal) {
+          this.$router.push({query: {}})
+        }
         this.$emit('dialogClose')
       }
     },

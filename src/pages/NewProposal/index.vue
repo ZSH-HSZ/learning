@@ -109,7 +109,7 @@
       }
 
       .enter {
-        background:rgba(0,99,177,1);
+        background:#00b7c3;
         color: #fff;
       }
     }
