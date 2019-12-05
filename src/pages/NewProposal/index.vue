@@ -1,7 +1,7 @@
 <template>
   <div class="new-question dialog-component" v-if="visible">
     <div class="dialog-body">
-      <CTitle title="咨询答疑" @dialogClose="closeDialog()"></CTitle>
+      <CTitle title="指导书建议" @dialogClose="closeDialog()"></CTitle>
       <div class="input-contain">
         <textarea name="" id="input-contain" rows="10" cols="77" v-model="input"></textarea>
         <div class="mask align jus" v-if="!input">这里输入你的建议</div>
