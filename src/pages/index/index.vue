@@ -30,7 +30,7 @@
 
 
     <Rank :visible="modalControl.task" @closeDialog="closeDialog"></Rank>
-    <Draw :visible.sync="modalControl.drawDialog"></Draw>
+    <Draw :visible.sync="modalControl.draw"></Draw>
   </div>
 </template>
 
@@ -61,7 +61,7 @@
         show: {
           task: 'task',
           faq: 'faq',
-          draw: 'drawDialog',
+          draw: 'draw',
           advise: 'advise'
         },
         minute: this.formatHH(),
@@ -77,13 +77,13 @@
 
           // 排名窗口
           task: false,
-          drawDialog: false,
+          draw: false,
         }
       }
     },
     watch: {
-      drawDialog(newValue, oldValue) {
-        if(!newValue) {
+      modalControl(newValue, oldValue) {
+        if(!newValue.draw) {
           this.$router.push({query: {}})
         }
       }
