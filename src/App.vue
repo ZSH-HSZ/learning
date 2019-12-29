@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="align jus">
     <router-view></router-view>
+    <div class="img-bg"></div>
   </div>
 </template>
 
@@ -21,11 +22,18 @@
     font-family: 'Microsoft YaHei', 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
     width: 100%;
     height: 100%;
-    background-image: url('./static/images/index_bg.png');
-    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: relative;
+    color: #fff;
+    .img-bg {
+      position: absolute;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      background-image: url('./static/images/index_bg.png');
+      background-size: cover;
+    }
   }
 </style>

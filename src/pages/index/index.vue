@@ -1,6 +1,6 @@
 <template>
   <div class="app-index">
-    <div class="index11-left">
+    <!-- <div class="index11-left">
       <div class="index11-time">{{minute}}</div>
       <div class="index11-date">{{formatYY()}} 星期{{formatWeek()}}</div>
       <div class="index11-name">
@@ -21,13 +21,32 @@
         <div>{{item.title}}</div>
         <div class="msg" v-if="Number(item.msg)">{{item.msg}}</div>
       </div>
+    </div> -->
+    <div class="app-header-box">
     </div>
+    <div class="app-header-text">
+      智能学考系统
+    </div>
+    <div class="app-body align">
+      <AppBodyLeft />
+      <AppBodyCenter>
+        <div class="align jus task-box">
+          <div class="border-radius"></div>
+          <div class="list-task" v-for="(item, index) in [1,2,3,4,5]" :key="index" :style="`transform: translateY(${(2-Math.abs(index-2))*20}px)`">
+            <img :class="`list-task-img-${2-Math.abs(index-2)}`" src="../../static/images/5.png" alt="">
+            <div :class="`list-task-text-${2-Math.abs(index-2)}`">模块学习</div>
+          </div>
+        </div>
+        
+      </AppBodyCenter>
+      <AppBodyRight />
+    </div>
+
     <Question :visible="modalControl.faq" @closeDialog="closeDialog" @newQuestion="closeAndOpenNewModel"></Question>
     <NewQuestion :visible="modalControl.newQuestionDialog" @closeDialog="closeAndOpenNewModel"></NewQuestion>
 
     <Proposal :visible="modalControl.advise" @closeDialog="closeDialog" @newQuestion="closeAndOpenNewModel"></Proposal>
     <NewProposal :visible="modalControl.dialogProposalNew" @closeDialog="closeAndOpenNewModel"></NewProposal>
-
 
     <Rank :visible="modalControl.task" @closeDialog="closeDialog"></Rank>
     <Draw :visible.sync="modalControl.draw"></Draw>
@@ -35,19 +54,26 @@
 </template>
 
 <script>
-  import Rank from '../Rank/index'
 
+  import AppBodyLeft from '../../modules/index/AppBodyLeft'
+  import AppBodyCenter from '../../modules/index/AppBodyCenter'
+  import AppBodyRight from '../../modules/index/AppBodyRight'
+
+  import Rank from '../Rank/index'
   import Question from '../Question/index'
   import NewQuestion from '../NewQuestion/index'
-
   import Proposal from '../Proposal/index'
   import NewProposal from '../NewProposal/index'
   import {
     DrawDialog
   } from '../DrawDialog/DrawDialog.umd.min.js'
-  import moment from 'moment'
+  
   export default {
     components: {
+      AppBodyLeft,
+      AppBodyCenter,
+      AppBodyRight,
+
       Question,
       Rank,
       NewQuestion,
@@ -64,7 +90,6 @@
           draw: 'draw',
           advise: 'advise'
         },
-        minute: this.formatHH(),
         modalControl: {
           advise: false,
           dialogProposalNew: false,
@@ -89,8 +114,6 @@
       }
     },
     mounted() {
-      this.getHH();
-      this.query();
       if(this.$route.query.modal) {
         this.$set(this.modalControl, this.$route.query.modal, true)
       }
@@ -132,124 +155,74 @@
         // 打开新问题弹窗
         this.openNew(val.new)
       },
-      getHH() {
-        setTimeout(()=>{
-          this.minute = this.formatHH();
-          this.getHH()
-        }, 1000)
-      },
-      formatHH() {
-        return moment().format('HH:mm')
-      },
-      formatYY() {
-        return moment().format('YYYY年MM月DD日')
-      },
-      formatWeek() {
-        return ['日', '一', '二', '三', '四', '五', '六'][new Date().getDay()]
-      }
     },
   }
 
 </script>
 
 <style lang='less' scoped>
-  .app-index {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 150px;
-  }
-
-  .index11-left {
+  .app-header-box {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 300px;
-    margin-right: 55px;
+    height:0;
+    border-top: 50px solid rgba(0, 0, 0, 0.7);
+    border-right: 37px solid transparent;
+    border-left:37px solid transparent;
   }
-
-  .index11-left .index11-time {
-    font-size: 35px;
-    font-family: PingFang;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 1);
-    letter-spacing: 5px;
+  .app-header-text {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    height: 50px;
+    width: 300px;
+    line-height: 50px;
+    font-size: 28px;
   }
-
-  .index11-left .index11-date {
-    margin: 10px auto;
-    font-size: 14px;
-    font-family: PingFang;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-    letter-spacing: 2px;
-  }
-
-  .index11-left .index11-name {
-    background: rgba(108,168,255, .7);
-    margin-bottom: 10px;
-    padding: 9px;
-    text-align: left;
-  }
-
-  .index11-name .name-1 {
-    font-size: 20px;
-    font-family: PingFang;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 1);
-    margin: 10px auto;
-  }
-
-  .index11-name .name-2 {
-    font-size: 14px;
-    font-family: PingFang;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-    margin-bottom: 9px;
-  }
-
-  .index11-right {
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    width: 396px;
-  }
-
-  .index11-right .right-flex {
-    width: 122px;
-    height: 122px;
-    margin: 5px;
-    background: rgba(34,38,43,0.53);
-    cursor: pointer;
-    transition: all .3s linear;
+  .task-box {
     position: relative;
-    .msg {
-      position: absolute;
-      right: -8px;
-      top: -10px;
-      background: #ff0008;
-      color: #fff;
-      font-size: 14px;
-      text-align: center;
-      line-height: 20px;
-      width: 20px;
-      height: 20px;
+    .border-radius {
+      width: 500px;
+      height: 100px;
       border-radius: 100%;
+      position: absolute;
+      left: 50px;
+      top: -30px;
+      border: 3px solid rgb(203, 199, 199);
+    }
+    .list-task {
+      margin: 0 15px;
+      text-align: center;
+      div {
+
+      }
+      img {
+
+      }
+      .list-task-img-0 {
+        width: 50px;
+      }
+      .list-task-img-1 {
+        width: 55px;
+      }
+      .list-task-img-2 {
+        width: 65px;
+      }
+      .list-task-text-0 {
+        font-size: 14px;
+      }
+      .list-task-text-1 {
+        font-size: 18px;
+      }
+      .list-task-text-2 {
+        font-size: 20px;
+      }
+
     }
   }
-  .index11-right .right-flex:hover {
-    background: rgba(108,168,255, .7);
-  }
-
-  .right-flex img {
-    display: block;
-    width: 30px;
-    height: 30px;
-    margin: 30px auto;
-  }
-
-  .right-flex div {
-    font-size: 18px;
-    font-family: PingFang;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-  }
-
+  
 </style>

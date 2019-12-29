@@ -1,37 +1,36 @@
 <template>
   <div class="progress">
-    <div class="percent" :style="`width: ${percent*311}px;background: ${background}`" ></div>
+    <div class="percent" :style="`width: ${(info.complate/info.all)*210}px;`">
+      {{info.complate}}/{{info.all}}已完成
+    </div>
   </div>
 </template>
 
 <script>
   export default {
     props: {
-      percent: {
-        type: Number,
-      },
-      background: {
-        type: String,
-        default: '#ff7d0d'
-      }
+      info: Object
     },
   }
 </script>
 
 <style lang="less" scoped>
   .progress {
-    width: 311px;
-    height: 13px;
+    width: 210px;
+    height: 20px;
     position: relative;
-    border-radius: 7px;
-    background: rgba(34,38,43,.2);
+    border-radius: 10px;
+    background: #333f50;
     .percent {
       position: absolute;
       left: 0;
       top: 0;
-      border-radius: 7px;
-      background: #ff7d0d;
-      height: 13px;
+      border-radius: 10px;
+      background: #fff;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      color: #333f50;
     }
   }
 </style>

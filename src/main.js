@@ -5,6 +5,7 @@ import store from './store'
 import ElementUI from 'element-ui';
 import apis from './plugins/apis.js'
 import components from './plugins/components.js'
+import '../src/components/Icon/iconfont'
 import './DrawDialog.css';
 import '../src/static/style/index.less'
 import 'element-ui/lib/theme-chalk/index.css';
