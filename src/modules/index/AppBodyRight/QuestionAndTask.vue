@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <QuestionDetail :visible.sync="questionDetailShow" :info="showQuestionInfo" @refresh="refresh"></QuestionDetail>
+    <QuestionDetail :visible.sync="questionDetailShow" :info="showQuestionInfo"></QuestionDetail>
   </div>
 </template>
 

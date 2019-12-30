@@ -57,7 +57,7 @@
       <img src="../static/images/close.png" class="close point" alt="" @click="closeDialog()">
       <div class="input-modal align">
         <div class="input-new-contain">
-          <input type="text" class="input-new" placeholder="输入你的回答" v-model="inputValue">
+          <input type="text" class="input-new" placeholder="输入你的回答" v-model="inputValue" @keyup.enter="submit()">
         </div>
         <div class="submit point" @click="submit()">
           提交
@@ -116,6 +116,7 @@
           .then(res => {
             if (res.code === 200) {
               this.$message.success('提交成功')
+              this.inputValue = ''
               this.query()
             }
           })

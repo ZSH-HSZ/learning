@@ -26,7 +26,6 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     position: relative;
-    color: #fff;
     .img-bg {
       position: absolute;
       z-index: -1;

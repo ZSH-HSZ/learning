@@ -205,7 +205,9 @@
   .app-index {
     padding-top: 50px;
   }
-
+  .app-body {
+    color: #fff;
+  }
   .app-header-box {
     position: fixed;
     top: 0;
@@ -228,6 +230,7 @@
     width: 300px;
     line-height: 50px;
     font-size: 28px;
+    color: #fff;
   }
 
   .task-box {
