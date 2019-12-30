@@ -3,56 +3,16 @@
     <div class="app-index13 dialog-body">
       <CTitle title="任务排名" @dialogClose="closeDialog()"></CTitle>
       <div class="index13-main">
-        <!-- <div class="index13-left">
-          <div class="left-header"><img src="../../static/images/9.png" alt=""></div>
-          <div class="left-center">
-            <ul>
-              <li>
-                <div class="li-left">
-                  1&emsp;王小五
-                </div>
-                <div class="li-righ">
-                  98分
-                </div>
-              </li>
-              <li>
-                <div class="li-left">
-                  1&emsp;王小五
-                </div>
-                <div class="li-righ">
-                  98分
-                </div>
-              </li>
-              <li>
-                <div class="li-left">
-                  1&emsp;王小五
-                </div>
-                <div class="li-righ">
-                  98分
-                </div>
-              </li>
-              <li>
-                <div class="li-left">
-                  1&emsp;王小五
-                </div>
-                <div class="li-righ">
-                  98分
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="left-footer">我的份 78 &emsp;&emsp; 排名 99</div>
-        </div> -->
         <div class="index13-right">
           <div class="right-header">我有{{$_.get(taskStatus, 'pending.length')}}个学习任务未完成</div>
           <div v-for="(item, index) in $_.get(taskStatus, 'pending')" :key="index">
-            <Progress class="com-progress" :percent="item.done_rate" />
+            <ProgressOld class="com-progress" :percent="item.done_rate" />
             <div class="right-2">{{item.done_cnt}}{{item.title}}</div>
           </div>
           
           <div class="right-header right-header1">我有{{$_.get(taskStatus, 'finished.length')}}个学习任务已完成</div>
           <div v-for="(item, index) in $_.get(taskStatus, 'finished')" :key="`${index}${item.title}`">
-            <Progress class="com-progress" :percent="item.done_rate" background="#00cc6a" />
+            <ProgressOld class="com-progress" :percent="item.done_rate" background="#00cc6a" />
             <div class="right-2">{{item.done_cnt}}{{item.title}}</div>
           </div>
         </div>
@@ -62,7 +22,11 @@
 </template>
 
 <script>
+import ProgressOld from '../../components/ProgressOld'
   export default {
+    components: {
+      ProgressOld,
+    },
     props: {
       visible: {
         type: Boolean,

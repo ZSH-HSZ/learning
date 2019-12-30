@@ -24,7 +24,7 @@
     -moz-osx-font-smoothing: grayscale;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.7);
     position: relative;
     color: #fff;
     .img-bg {

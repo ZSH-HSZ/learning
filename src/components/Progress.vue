@@ -1,7 +1,7 @@
 <template>
   <div class="progress">
-    <div class="percent" :style="`width: ${(info.complate/info.all)*210}px;`">
-      {{info.complate}}/{{info.all}}已完成
+    <div class="percent" :style="`width: ${info.done_rate*210}px;`">
+      {{info.label}}
     </div>
   </div>
 </template>
@@ -21,6 +21,7 @@
     position: relative;
     border-radius: 10px;
     background: #333f50;
+    border: 1px solid #fff;
     .percent {
       position: absolute;
       left: 0;

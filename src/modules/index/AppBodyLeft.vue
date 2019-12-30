@@ -1,20 +1,28 @@
 <template>
   <div class="app-body-left">
     <div class="shadow-box index-and-department">
-      学号:423434****2718|机械部
+      {{$_.get(userInfo, 'info.uid_label')}}
     </div>
-    <div class="shadow-box basic-info align direction jus">
-      <div v-for="(val, i) in $_.chunk(list, 3)" :key="i" class="align around line-item">
-        <div v-for="(item, index) in val" :key="index" class="align jus direction progress-detail">
-          <ProgressCircle :progressValue="item.value"></ProgressCircle>
-          <div class="item-label">{{item.label}}</div>
+    <div class="shadow-box basic-info align direction">
+      <div v-for="(val, i) in $_.chunk($_.get(userInfo, 'score'), 3)" :key="i" class="align line-item">
+        <div v-for="(item, index) in val" :key="index" class="progress-detail">
+          <div class="align jus direction">
+            <ProgressCircle :progressValue="item.score" v-if="item.type==='percent'"></ProgressCircle>
+            <div class="star-contian" v-if="item.type==='star'" :style="`background-image: url(${item.bg})`">
+              {{item.score}}
+            </div>
+            <div class="digital-contain" v-if="item.type==='digital'">
+              {{item.score}}
+            </div>
+            <div class="item-label">{{item.title}}</div>
+          </div>
         </div>
       </div>
     </div>
     <div class="shadow-box learning">
       <div class="learning-header">学习任务</div>
-      <div class="item-leadning-task" v-for="(item, index) in learningList" :key="index">
-        <div class="learning-title">{{item.label}}</div>
+      <div class="item-leadning-task" v-for="(item, index) in $_.get(taskList, 'pending', [])" :key="index">
+        <div class="learning-title">{{item.title}}</div>
         <Progress :info="item" class="progress-percent"></Progress>
       </div>
     </div>
@@ -23,6 +31,10 @@
 
 <script>
   export default {
+    props: {
+      taskList: Object,
+      userInfo: Object,
+    },
     data() {
       return {
         list: [
@@ -51,23 +63,6 @@
             label: '标准岗位分'
           },
         ],
-        learningList: [
-          {
-            label: '背诵机车操作手册',
-            all: '13',
-            complate: '8'
-          },
-          {
-            label: '背诵机车操作手册',
-            all: '13',
-            complate: '8'
-          },
-          {
-            label: '背诵机车操作手册',
-            all: '13',
-            complate: '8'
-          },
-        ]
       }
     },
   }
@@ -84,13 +79,41 @@
     }
     .basic-info {
       margin-top: 18px;
-      padding: 0 24px;
+      padding: 24px;
       width: 300px;
       height: 180px;
       .line-item {
         width: 100%;
         .progress-detail {
+          width: 33%;
           margin-bottom: 3px;
+          .star-contian {
+            width: 50px;
+            height: 53px;
+            text-align: center;
+            line-height: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            background-size: cover;
+            color:#333;
+          }
+          .digital-contain {
+            width: 50px;
+            height: 53px;
+            text-align: center;
+            line-height: 50px;
+            position: relative;
+            font-size: 16px;
+            font-weight: bold;
+          }
+          .digital-contain::before {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            width: 40px;
+            left: 5px;
+            border-bottom: 5px solid #fff;
+          }
         }
         .item-label {
           font-size: 12px;

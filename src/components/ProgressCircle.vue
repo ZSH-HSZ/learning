@@ -40,7 +40,7 @@
       text-align: center;
       margin: 0;
       transform: translateY(-50%);
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
     }
   }

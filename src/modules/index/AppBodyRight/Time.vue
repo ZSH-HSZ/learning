@@ -1,6 +1,11 @@
 <template>
     <div class="shadow-box now-time align jus direction">
-      <div class="time align jus">{{time.substring(0, 2)}}<Icon type="icon50" class="maohao"></Icon>{{time.substring(2, 4)}}</div>
+      <div class="time align jus">{{time.substring(0, 2)}}
+        <div class="align jus direction center maohao">
+          <div class="circle"></div>
+          <div class="circle"></div>
+        </div>
+        {{time.substring(2, 4)}}</div>
       <div class="yy">{{yy}}</div>
     </div>
 </template>
@@ -48,6 +53,16 @@
       .yy {
         margin-top: 5px;
         font-size: 16px;
+      }
+      .center {
+        width: 30px;
+        .circle {
+          width: 5px;
+          height: 5px;
+          background: #fff;
+          border-radius: 100%;
+          margin: 5px 0;
+        }
       }
   }
   @keyframes timeOpacity {

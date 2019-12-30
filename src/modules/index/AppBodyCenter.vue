@@ -1,20 +1,18 @@
 <template>
   <div class="app-body-center">
-    <div class="welcome">你好，一二三</div>
+    <div class="welcome">{{$_.get(userInfo, 'info.welcome')}}</div>
     <div class="integral align jus">
       <div class="progress-circle">
-        <svg :width="180" :height="180" :viewBox="`0 0 ${180} ${180}`" class="svg">
-          <circle :cx="90" :cy="90" :r="75" fill="none" stroke="#fff" stroke-width="10" />
-        </svg>
+        <div class="circle-detail"></div>
         <div class="circel-progress align jus direction">
-          <div class="integral-header">当前积分</div>
-          <div class="integral-number">2930</div>
+          <div class="integral-header">总积分</div>
+          <div class="integral-number">{{$_.get(userInfo, 'coin.total')}}</div>
         </div>
       </div>
       <div class="can-get">
-        <div class="item-get">
-          <div class="item-get-title">提问</div>
-          <div class="item-get-number">18</div>
+        <div class="item-get" v-for="(item, index) in $_.get(userInfo, 'coin.detail')" :key="index" :style="`animation: getmove${index%2} ${index+30}s linear infinite ${direction[index%4]};top: ${(index/2)*30+20}px; ${index%2===0?'left':'right'}: 20px`">
+          <div class="item-get-title">{{item.title}}</div>
+          <div class="item-get-number">{{item.value}}</div>
         </div>
       </div>
     </div>
@@ -24,7 +22,20 @@
 
 <script>
   export default {
-    
+    props: {
+      userInfo: {
+        type: Object,
+      },
+    },
+    data() {
+      return {
+        position: {
+          'left': 20,
+          'top': 20
+        },
+        direction: ['normal', 'reverse', 'alternate', 'alternate-reverse']
+      }
+    },
   }
 </script>
 
@@ -42,6 +53,14 @@
       height: 400px;
       margin: 0 auto;
       position: relative;
+      .circle-detail {
+        width: 170px;
+        height: 170px;
+        background-color: transparent;
+        border: 8px solid #fff;
+        border-radius: 100%;
+        box-shadow: 0px 0px 5px 5px rgba(255, 255, 255, 0.3);
+      }
       .circel-progress {
         position: absolute;
         top: 50%;
@@ -65,11 +84,8 @@
       .can-get {
         .item-get {
           position: absolute;
-          left: 20px;
-          top: 20px;
           text-align: center;
           width: 60px;
-          animation: getmove 2s linear infinite;
           .item-get-ttile {
             font-size: 12px;
           }
@@ -88,7 +104,10 @@
       }
     }
   }
-  @keyframes getmove {
+  
+</style>
+<style lang="less">
+  @keyframes getmove0 {
     0% {
       transform: translate(0, 0);
     }
@@ -103,6 +122,26 @@
     }
     80% {
       transform: translate(20px, 5px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+  @keyframes getmove1 {
+    0% {
+      transform: translate(0, 0);
+    }
+    20% {
+      transform: translate(-10px, 10px);
+    }
+    40% {
+      transform: translate(-30px, 24px);
+    }
+    60% {
+      transform: translate(-10px, -35px);
+    }
+    80% {
+      transform: translate(-20px, 5px);
     }
     100% {
       transform: translate(0, 0);

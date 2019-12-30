@@ -1,45 +1,25 @@
 <template>
   <div class="app-index">
-    <!-- <div class="index11-left">
-      <div class="index11-time">{{minute}}</div>
-      <div class="index11-date">{{formatYY()}} 星期{{formatWeek()}}</div>
-      <div class="index11-name">
-        <h2 class="name-1">{{$_.get(userInfo, 'info.welcome')}}</h2>
-        <div class="name-2">部门：{{$_.get(userInfo, 'info.department')}}</div>
-        <div class="name-2">工号：{{$_.get(userInfo, 'info.uid')}}</div>
-      </div>
-      <div class="index11-name">
-        <h2 class="name-1">我的成绩</h2>
-        <div class="name-2" v-for="(item, index) in $_.get(userInfo, 'score')" :key="index">
-          {{$_.get(item, 'title')}}：{{$_.get(item, 'score')}}
-        </div>
-      </div>
-    </div>
-    <div class="index11-right align">
-      <div @click="showModal(item)" class="right-flex" v-for="(item, index) in $_.get(userInfo, 'app', [])" :key="index">
-        <img :src="item.icon" alt="">
-        <div>{{item.title}}</div>
-        <div class="msg" v-if="Number(item.msg)">{{item.msg}}</div>
-      </div>
-    </div> -->
     <div class="app-header-box">
     </div>
     <div class="app-header-text">
       智能学考系统
     </div>
     <div class="app-body align">
-      <AppBodyLeft />
-      <AppBodyCenter>
-        <div class="align jus task-box">
-          <div class="border-radius"></div>
-          <div class="list-task" v-for="(item, index) in [1,2,3,4,5]" :key="index" :style="`transform: translateY(${(2-Math.abs(index-2))*20}px)`">
-            <img :class="`list-task-img-${2-Math.abs(index-2)}`" src="../../static/images/5.png" alt="">
-            <div :class="`list-task-text-${2-Math.abs(index-2)}`">模块学习</div>
-          </div>
+      <AppBodyLeft :userInfo="userInfo" :taskList="taskList" />
+      <AppBodyCenter :userInfo="userInfo">
+        <div class="align jus task-box" id="drag">
+          <swiper :options="swiperOption">
+            <swiper-slide class="list-task" v-for="(item, index) in $_.get(userInfo, 'app')" :key="index">
+              <div @click="showModal(item)" class="align jus direction point">
+                <div class="transform-icon" :style="`background-image: url(${item.icon})`"></div>
+                <div>{{item.title}}</div>
+              </div>
+            </swiper-slide>
+          </swiper>
         </div>
-        
       </AppBodyCenter>
-      <AppBodyRight />
+      <AppBodyRight :knowledgeList="knowledgeList" @changeShow="changeShow" />
     </div>
 
     <Question :visible="modalControl.faq" @closeDialog="closeDialog" @newQuestion="closeAndOpenNewModel"></Question>
@@ -54,7 +34,6 @@
 </template>
 
 <script>
-
   import AppBodyLeft from '../../modules/index/AppBodyLeft'
   import AppBodyCenter from '../../modules/index/AppBodyCenter'
   import AppBodyRight from '../../modules/index/AppBodyRight'
@@ -67,7 +46,15 @@
   import {
     DrawDialog
   } from '../DrawDialog/DrawDialog.umd.min.js'
-  
+
+  import 'swiper/dist/css/swiper.css'
+
+  import {
+    swiper,
+    swiperSlide
+  } from 'vue-awesome-swiper'
+
+
   export default {
     components: {
       AppBodyLeft,
@@ -79,11 +66,17 @@
       NewQuestion,
       Draw: DrawDialog,
       Proposal,
-      NewProposal
+      NewProposal,
+
+      swiper,
+      swiperSlide
     },
     data() {
       return {
         userInfo: {},
+        taskList: {},
+        knowledgeList: {},
+        activeIndex: 2,
         show: {
           task: 'task',
           faq: 'faq',
@@ -103,44 +96,93 @@
           // 排名窗口
           task: false,
           draw: false,
+        },
+        swiperOption: {
+          slidesPerView: 5,
+          initialSlide: 2,
+          spaceBetween: 20,
+          centeredSlides: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          }
         }
       }
     },
     watch: {
       modalControl(newValue, oldValue) {
-        if(!newValue.draw) {
-          this.$router.push({query: {}})
+        if (!newValue.draw) {
+          this.$router.push({
+            query: {}
+          })
         }
       }
     },
     mounted() {
-      if(this.$route.query.modal) {
+      if (this.$route.query.modal) {
         this.$set(this.modalControl, this.$route.query.modal, true)
       }
+      this.getTask()
+      this.query()
+      this.getKnowledge('new')
+      this.addListner()
     },
     methods: {
+      showDetail(val) {
+        this.$set(this.modalControl, this.$route.query.modal, true)
+      },
+      addListner() {
+        let drag = document.getElementById('drag')
+        drag
+      },
+      getTask() {
+        this.$post({
+            road: 'task'
+          })
+          .then(res => {
+            this.taskList = res
+          })
+      },
       query() {
         this.$post({
-          road: 'userInfo'
-        })
-        .then(res=>{
-          this.userInfo = res
-        })
+            road: 'userInfo'
+          })
+          .then(res => {
+            this.userInfo = res
+          })
+      },
+      getKnowledge(dtype) {
+        this.$post({
+            road: 'knowledge',
+            data: {
+              dtype
+            }
+          })
+          .then(res => {
+            this.knowledgeList = res
+          })
+      },
+      changeShow(val) {
+        this.knowledgeList = {}
+        this.getKnowledge(val)
       },
       showModal(item) {
+        console.log(item)
         let uri = item.uri
-        if(/http:/.test(item.uri)) {
+        if (/http:/.test(item.uri)) {
           window.location.href = item.uri
-        }else {
-          let query  = Object.assign({}, this.$route.query)
-          if(this.show[uri]) {
+        } else {
+          let query = Object.assign({}, this.$route.query)
+          if (this.show[uri]) {
             this.$set(this.modalControl, this.show[uri], true)
             this.$router.push({
-              query: this.$_.assign(query, {modal: uri})
+              query: this.$_.assign(query, {
+                modal: uri
+              })
             })
           }
         }
-        
+
       },
       // 关闭弹窗
       closeDialog(val) {
@@ -157,21 +199,25 @@
       },
     },
   }
-
 </script>
 
 <style lang='less' scoped>
+  .app-index {
+    padding-top: 50px;
+  }
+
   .app-header-box {
     position: fixed;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 300px;
-    height:0;
+    height: 0;
     border-top: 50px solid rgba(0, 0, 0, 0.7);
     border-right: 37px solid transparent;
-    border-left:37px solid transparent;
+    border-left: 37px solid transparent;
   }
+
   .app-header-text {
     position: fixed;
     top: 0;
@@ -183,46 +229,60 @@
     line-height: 50px;
     font-size: 28px;
   }
+
   .task-box {
     position: relative;
-    .border-radius {
-      width: 500px;
-      height: 100px;
-      border-radius: 100%;
-      position: absolute;
-      left: 50px;
-      top: -30px;
-      border: 3px solid rgb(203, 199, 199);
-    }
+    width: 500px;
+    margin: 0 auto;
+    user-select: none;
     .list-task {
-      margin: 0 15px;
       text-align: center;
-      div {
+      font-size: 14px;
+    }
 
-      }
-      img {
-
-      }
-      .list-task-img-0 {
-        width: 50px;
-      }
-      .list-task-img-1 {
-        width: 55px;
-      }
-      .list-task-img-2 {
+    .swiper-slide-active {
+      font-size: 20px;
+      padding-top: 20px;
+      .transform-icon {
         width: 65px;
+        height: 65px;
       }
-      .list-task-text-0 {
-        font-size: 14px;
-      }
-      .list-task-text-1 {
-        font-size: 18px;
-      }
-      .list-task-text-2 {
-        font-size: 20px;
-      }
+    }
 
+    .swiper-slide-prev,
+    .swiper-slide-next {
+      font-size: 18px;
+      padding-top: 10px;
+      .transform-icon {
+        width: 55px;
+        height: 55px;
+      }
+    }
+
+    .transform-icon {
+      background-size: cover;
+      margin: 0 auto 5px;
+      width: 50px;
+      height: 50px;
+      transition: all .2s linear;
     }
   }
-  
+</style>
+
+<style scoped>
+  .swiper-slide {
+    width: 60%;
+  }
+
+  .swiper-slide:nth-child(2n) {
+    width: 40%;
+  }
+
+  .swiper-slide:nth-child(3n) {
+    width: 20%;
+  }
+
+  .list-task.swiper-slide {
+    width: 100px;
+  }
 </style>

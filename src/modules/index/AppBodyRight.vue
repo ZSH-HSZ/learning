@@ -1,7 +1,6 @@
 <template>
   <div class="app-body-right">
-    
-    <QuestionAndTask></QuestionAndTask>
+    <QuestionAndTask :knowledgeList="knowledgeList" @changeShow="changeShow"></QuestionAndTask>
     <Time></Time>
   </div>
 </template>
@@ -13,6 +12,14 @@
     components: {
       Time,
       QuestionAndTask
+    },
+    props: {
+      knowledgeList: Object
+    },
+    methods: {
+      changeShow(val) {
+        this.$emit('changeShow', val)
+      }
     },
   }
 </script>
