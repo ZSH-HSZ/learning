@@ -17,7 +17,7 @@
 <style lang="less" scoped>
   .progress {
     width: 210px;
-    height: 20px;
+    height: 22px;
     position: relative;
     border-radius: 10px;
     background: #333f50;
