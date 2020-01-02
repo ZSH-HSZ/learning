@@ -33,7 +33,7 @@
     position: relative;
     img {
       position: absolute;
-      right: 0px;
+      right: -38px;
       top: -6px;
     }
   }

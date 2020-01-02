@@ -21,7 +21,7 @@
             <div class="cloud9-item" v-for="(item, index) in $_.get(userInfo, 'app')" :key="index"
               style="width: 100px;height: 100px;">
               <div @click="showModal(item)" class="align jus direction point">
-                <div class="transform-icon" :style="`background-image: url(${item.icon})`"></div>
+                <img class="transform-icon" :src="item.icon" alt="">
                 <div>{{item.title}}</div>
               </div>
             </div>
