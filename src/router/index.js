@@ -16,14 +16,6 @@ const routes = [
       return import('../pages/DrawDialog/index.vue')
     }
   },
-  {
-    path: '/test',
-    name: 'test',
-    component: function () {
-      return import('../pages/test/index.vue')
-    }
-  },
- 
 ]
 
 const router = new VueRouter({
