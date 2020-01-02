@@ -9,10 +9,12 @@
     </div>
     <div>
       <div class="question-box">
-        <div class="align question-item point" :class="`${item.margin==='right'?'reverse':''}`" :style="`animation: ${(knowledgeListLength>6&&index<=(knowledgeListLength-6))?'hideBox':''} 2s linear ${index*2}s 1 alternate forwards;`"
-          v-for="(item, index) in $_.get(knowledgeList, 'list', [])" :key="index" @click="showQuestionDetail(item)">
-          <div class="question-detail" :class="`${item.margin}`">{{item.title}}</div>
-          <div class="flex-all"></div>
+        <div ref="questionBoxEnter" class="question-box-enter" v-if="$_.get(knowledgeList, 'list.length')">
+          <div class="align question-item point" :class="`${item.margin==='right'?'reverse':''}`"
+            v-for="(item, index) in $_.get(knowledgeList, 'list', [])" :key="index" @click="showQuestionDetail(item)">
+            <div class="question-detail" :class="`${item.margin}`">{{item.title}}</div>
+            <div class="flex-all"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -33,7 +35,6 @@
     },
     watch: {
       knowledgeList(newValue, oldValue) {
-        this.hideIndex = -1;
         this.setHide()
       }
     },
@@ -68,6 +69,30 @@
         this.questionDetailShow = true
       },
       setHide() {
+        setTimeout(() => {
+          let height = this.$refs.questionBoxEnter.clientHeight
+          const runkeyframes = ` @keyframes getmove{
+              0%{
+                  transform: translateY(0);
+              }
+              100%{
+                  transform: translateY(-${((height-335)/height)*100}%);
+              }
+          }`
+          console.log(``)
+          // 创建style标签
+          const style = document.createElement('style');
+          // 设置style属性
+          style.type = 'text/css';
+          // 将 keyframes样式写入style内
+          style.innerHTML = runkeyframes;
+          // 将style样式存放到head标签
+          document.getElementsByTagName('head')[0].appendChild(style);
+          if (height > 335) {
+            this.$refs.questionBoxEnter.style =
+              `animation: ${(height-335)/20}s linear 0s infinite alternate none running getmove`
+          }
+        }, 100);
       },
     },
   }
@@ -97,10 +122,12 @@
         }
       }
     }
+
     .question-box {
       height: 335px;
       overflow: hidden;
     }
+
     .question-item.reverse {
       flex-direction: row-reverse;
     }
@@ -108,6 +135,7 @@
     .question-item {
       padding: 0 10px;
       overflow: hidden;
+
       .question-detail {
         min-height: 30px;
         line-height: 30px;
@@ -168,21 +196,5 @@
       }
     }
 
-  }
-  
-</style>
-<style lang="less">
-  @keyframes hideBox {
-    0% {
-      opacity: 1;
-      display: block;
-    }
-    99% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0;
-      height: 0;
-    }
   }
 </style>
