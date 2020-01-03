@@ -73,7 +73,6 @@
 
 <style lang="less" scoped>
   .dialog-component .dialog-body {
-    height: 500px;
   }
   .question {
     .new-question {
