@@ -22,14 +22,14 @@
     font-family: 'Microsoft YaHei', 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    width: 100%;
+    width: 100vw;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     position: relative;
     .img-bg {
       position: absolute;
       z-index: -1;
-      width: 100%;
+      width: 100vw;
       height: 100%;
       background-image: url('./static/images/index_bg.png');
       background-size: cover;
