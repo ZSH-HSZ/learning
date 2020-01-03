@@ -9,14 +9,23 @@
       <AppBodyLeft :userInfo="userInfo" :taskList="taskList" />
       <AppBodyCenter :userInfo="userInfo">
         <div class="align jus task-box" id="drag">
-          <swiper :options="swiperOption">
+          <!-- <swiper :options="swiperOption">
             <swiper-slide class="list-task" v-for="(item, index) in $_.get(userInfo, 'app')" :key="index">
               <div @click="showModal(item)" class="align jus direction point">
                 <div class="transform-icon" :style="`background-image: url(${item.icon})`"></div>
                 <div>{{item.title}}</div>
               </div>
             </swiper-slide>
-          </swiper>
+          </swiper> -->
+          <div id="carousel" style="width: 600px;height: 200px" v-if="$_.get(userInfo, 'app')">
+            <div class="cloud9-item" v-for="(item, index) in $_.get(userInfo, 'app')" :key="index"
+              style="width: 100px;height: 100px;">
+              <div @click="showModal(item)" class="align jus direction point">
+                <img class="transform-icon" :src="item.icon" alt="">
+                <div>{{item.title}}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </AppBodyCenter>
       <AppBodyRight :knowledgeList="knowledgeList" @changeShow="changeShow" />
@@ -47,12 +56,6 @@
     DrawDialog
   } from '../DrawDialog/DrawDialog.umd.min.js'
 
-  import 'swiper/dist/css/swiper.css'
-
-  import {
-    swiper,
-    swiperSlide
-  } from 'vue-awesome-swiper'
 
 
   export default {
@@ -68,8 +71,6 @@
       Proposal,
       NewProposal,
 
-      swiper,
-      swiperSlide
     },
     data() {
       return {
@@ -149,6 +150,20 @@
           })
           .then(res => {
             this.userInfo = res
+            setTimeout(() => {
+              $("#carousel").Cloud9Carousel({
+                yOrigin: 42,
+                yRadius: 48,
+                mirror: {
+                  gap: 12,
+                  height: 0.2
+                },
+                buttonLeft: $("#nav > .left"),
+                buttonRight: $("#nav > .right"),
+                autoPlay: 1,
+                bringToFront: true,
+              });
+            }, 0);
           })
       },
       getKnowledge(dtype) {
@@ -167,8 +182,8 @@
         this.getKnowledge(val)
       },
       showModal(item) {
-        console.log(item)
-        let uri = item.uri
+        setTimeout(() => {
+          let uri = item.uri
         if (/http:/.test(item.uri)) {
           window.location.href = item.uri
         } else {
@@ -182,6 +197,7 @@
             })
           }
         }
+        }, 200);
 
       },
       // 关闭弹窗
@@ -205,9 +221,11 @@
   .app-index {
     padding-top: 50px;
   }
+
   .app-body {
     color: #fff;
   }
+
   .app-header-box {
     position: fixed;
     top: 0;
@@ -235,39 +253,23 @@
 
   .task-box {
     position: relative;
-    width: 500px;
+    width: 600px;
     margin: 0 auto;
     user-select: none;
+
     .list-task {
       text-align: center;
       font-size: 14px;
     }
 
-    .swiper-slide-active {
-      font-size: 20px;
-      padding-top: 20px;
-      .transform-icon {
-        width: 65px;
-        height: 65px;
-      }
+    .transform-icon {
+      width: 65px;
+      height: 65px;
     }
 
-    .swiper-slide-prev,
-    .swiper-slide-next {
+    #carousel {
       font-size: 18px;
       padding-top: 10px;
-      .transform-icon {
-        width: 55px;
-        height: 55px;
-      }
-    }
-
-    .transform-icon {
-      background-size: cover;
-      margin: 0 auto 5px;
-      width: 50px;
-      height: 50px;
-      transition: all .2s linear;
     }
   }
 </style>

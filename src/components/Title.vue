@@ -27,14 +27,13 @@
     font-weight: bold;
     color: rgba(51, 51, 51, 1);
     text-align: center;
-    width: 500px;
     text-align: center;
     padding: 0 40px;
     margin: 0 auto;
     position: relative;
     img {
       position: absolute;
-      right: -115px;
+      right: -38px;
       top: -6px;
     }
   }

@@ -64,7 +64,6 @@ import ProgressOld from '../../components/ProgressOld'
 <style lang="less" scoped>
   .index13.dialog-component {
     .dialog-body {
-      height: 500px;
     }
   }
   .app-index13 {
