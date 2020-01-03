@@ -6,14 +6,14 @@
         <div class="index13-right">
           <div class="right-header">我有{{$_.get(taskStatus, 'pending.length')}}个学习任务未完成</div>
           <div v-for="(item, index) in $_.get(taskStatus, 'pending')" :key="index">
-            <ProgressOld class="com-progress" :percent="item.done_rate" />
-            <div class="right-2">{{item.done_cnt}}{{item.title}}</div>
+            <ProgressOld class="com-progress" :percent="item.done_rate" :label="item.label" />
+            <div class="right-2">{{item.title}}</div>
           </div>
           
           <div class="right-header right-header1">我有{{$_.get(taskStatus, 'finished.length')}}个学习任务已完成</div>
           <div v-for="(item, index) in $_.get(taskStatus, 'finished')" :key="`${index}${item.title}`">
-            <ProgressOld class="com-progress" :percent="item.done_rate" background="#00cc6a" />
-            <div class="right-2">{{item.done_cnt}}{{item.title}}</div>
+            <ProgressOld class="com-progress" :percent="item.done_rate" :label="item.label" background="#00cc6a" />
+            <div class="right-2">{{item.title}}</div>
           </div>
         </div>
       </div>
